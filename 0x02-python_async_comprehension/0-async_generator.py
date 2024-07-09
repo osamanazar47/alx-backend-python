@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Module for the first task in in python async comprehension"""
+""" Module for the first task Async Generator"""
 import asyncio
 import random
 from typing import Generator
