@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Module for testing the client.py file"""
 import unittest
-from unittest.mock import patch, Mock, PropertyMock
+from unittest.mock import patch, Mock, PropertyMock, MagicMock
 from parameterized import parameterized
 from client import GithubOrgClient
 from typing import Dict
@@ -43,9 +43,10 @@ class TestGithubOrgClient(unittest.TestCase):
 		{"name": "repo2"},
 		{"name": "repo3"},
 	])
-    def test_public_repos(self, mock_get_json) -> None:
+    def test_public_repos(self, mock_get_json: MagicMock) -> None:
         """For testiing the public_repos method in client file"""
-        with patch.object(GithubOrgClient, '_public_repos_url', new_callable=PropertyMock) as mock_url:
+        with patch.object(GithubOrgClient, '_public_repos_url',
+                          new_callable=PropertyMock) as mock_url:
             mock_url.return_value = "https://api.github.com/orgs/google/repos"
             client = GithubOrgClient("google")
             result = client.public_repos()
