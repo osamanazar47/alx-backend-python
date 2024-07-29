@@ -38,6 +38,27 @@ class TestGithubOrgClient(unittest.TestCase):
                 "https://api.github.com/users/google/repos",
             )
 
+    @patch('client.get_json', return_value=[
+		{"name": "repo1"},
+		{"name": "repo2"},
+		{"name": "repo3"},
+	])
+    def test_public_repos(self, mock_get_json) -> None:
+        """For testiing the public_repos method in client file"""
+        with patch.object(GithubOrgClient, '_public_repos_url', new_callable=PropertyMock) as mock_url:
+            mock_url.return_value = "https://api.github.com/orgs/google/repos"
+            client = GithubOrgClient("google")
+            result = client.public_repos()
+
+            # Assert that the result matches the expected list of repo names
+            self.assertEqual(result, ["repo1", "repo2", "repo3"])
+
+            # Assert that the mocked property was called once
+            mock_url.assert_called_once()
+
+            # Assert that the mocked get_json was called once with the correct URL
+            mock_get_json.assert_called_once_with("https://api.github.com/orgs/google/repos")
+
 
 if __name__ == '__main__':
     unittest.main()
